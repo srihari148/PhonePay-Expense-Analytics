@@ -1,0 +1,739 @@
+{
+  "datasets": [
+    {
+      "name": "997ddea8",
+      "displayName": "DS_PhonePe",
+      "queryLines": [
+        "SELECT\r\n",
+        "    year_month,\r\n",
+        "    SUM(total_amount) AS total_spend,\r\n",
+        "    SUM(transaction_count) AS total_transactions\r\n",
+        "FROM ppe.gold.gold_monthly_expenses\r\n",
+        "GROUP BY year_month\r\n",
+        "ORDER BY year_month DESC;\r\n"
+      ]
+    },
+    {
+      "name": "c7986a54",
+      "displayName": "gold_daily_expenses",
+      "queryLines": [
+        "SELECT * FROM ppe.gold.gold_daily_expenses"
+      ]
+    },
+    {
+      "name": "16d6ed2d",
+      "displayName": "gold_monthly_expenses",
+      "queryLines": [
+        "SELECT * FROM ppe.gold.gold_monthly_expenses"
+      ]
+    },
+    {
+      "name": "07c18a54",
+      "displayName": "gold_merchant_summary",
+      "queryLines": [
+        "SELECT * FROM ppe.gold.gold_merchant_summary"
+      ]
+    },
+    {
+      "name": "a052ce50",
+      "displayName": "Monthly KPI summary",
+      "queryLines": [
+        "SELECT\r\n",
+        "    year_month,\r\n",
+        "    SUM(total_amount) AS total_spend,\r\n",
+        "    SUM(transaction_count) AS total_transactions\r\n",
+        "FROM ppe.gold.gold_monthly_expenses\r\n",
+        "GROUP BY year_month\r\n",
+        "ORDER BY year_month DESC;\r\n"
+      ]
+    },
+    {
+      "name": "10e90ff8",
+      "displayName": "Category-wise spending",
+      "queryLines": [
+        "SELECT\r\n",
+        "    category,year_month,\r\n",
+        "    SUM(total_amount) AS total_spend\r\n",
+        "FROM ppe.gold.gold_monthly_expenses\r\n",
+        "GROUP BY category,year_month\r\n",
+        "ORDER BY total_spend DESC;\r\n"
+      ]
+    },
+    {
+      "name": "2755c312",
+      "displayName": "Daily expense trend",
+      "queryLines": [
+        "SELECT\r\n",
+        "    transaction_date,year_month,\r\n",
+        "    SUM(total_amount) AS daily_spend\r\n",
+        "FROM ppe.gold.gold_daily_expenses\r\n",
+        "GROUP BY transaction_date,year_month\r\n",
+        "ORDER BY transaction_date;\r\n"
+      ]
+    },
+    {
+      "name": "5ba408db",
+      "displayName": "Top merchants",
+      "queryLines": [
+        "SELECT\r\n",
+        "    merchant,year_month,\r\n",
+        "    SUM(total_amount) AS total_spend,\r\n",
+        "    SUM(transaction_count) AS txn_count\r\n",
+        "FROM ppe.gold.gold_merchant_summary\r\n",
+        "GROUP BY merchant,year_month\r\n",
+        "ORDER BY total_spend DESC\r\n",
+        "LIMIT 10;\r\n"
+      ]
+    },
+    {
+      "name": "f5e53579",
+      "displayName": "Year Fiter",
+      "queryLines": [
+        "SELECT DISTINCT year_month FROM ppe.gold.gold_monthly_expenses ORDER BY year_month DESC;\r\n"
+      ]
+    },
+    {
+      "name": "3f0beb2e",
+      "displayName": "investment_count",
+      "queryLines": [
+        "SELECT\r\n",
+        "    SUM(total_amount) AS investment_count\r\n",
+        "FROM ppe.gold.gold_monthly_expenses\r\n",
+        "WHERE category = 'Shares_Investments';\r\n"
+      ]
+    },
+    {
+      "name": "f00d254f",
+      "displayName": "total_debit_amount",
+      "queryLines": [
+        "SELECT\r\n",
+        "    SUM(debit_amount) AS total_debit_amount\r\n",
+        "FROM ppe.gold.gold_daily_expenses;\r\n"
+      ]
+    },
+    {
+      "name": "4063f63e",
+      "displayName": "total_credit_amount",
+      "queryLines": [
+        "SELECT\r\n",
+        "    SUM(credit_amount) AS total_credit_amount\r\n",
+        "FROM ppe.gold.gold_daily_expenses;\r\n"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "cb48b1d2",
+      "displayName": "PhonePay Exp",
+      "layout": [
+        {
+          "widget": {
+            "name": "20b8ebb3",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block\"><span style=\"font-size:18px\">**Hari's PhonePay Expense Analytics**</span></span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 2,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "667c60d2",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "997ddea8",
+                  "fields": [
+                    {
+                      "name": "monthly(year_month)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `year_month`)"
+                    },
+                    {
+                      "name": "sum(total_spend)",
+                      "expression": "SUM(`total_spend`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "area",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(year_month)",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_spend)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "title": "Monthly Spend Overview",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 7,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "4d35dda7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "16d6ed2d",
+                  "fields": [
+                    {
+                      "name": "sum(total_amount)",
+                      "expression": "SUM(`total_amount`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_amount)"
+                }
+              },
+              "frame": {
+                "title": "Total Amount",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 0,
+            "width": 1,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "54515cdb",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a052ce50",
+                  "fields": [
+                    {
+                      "name": "year_month",
+                      "expression": "`year_month`"
+                    },
+                    {
+                      "name": "total_spend",
+                      "expression": "`total_spend`"
+                    },
+                    {
+                      "name": "total_transactions",
+                      "expression": "`total_transactions`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "year_month",
+                    "title": "year_month",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "type": "string",
+                    "displayAs": "string"
+                  },
+                  {
+                    "fieldName": "total_spend",
+                    "title": "total_spend",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "type": "float",
+                    "displayAs": "number"
+                  },
+                  {
+                    "fieldName": "total_transactions",
+                    "title": "total_transactions",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "type": "integer",
+                    "displayAs": "number"
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "title": "Monthly KPI Summary Table",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 2,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "4421d600",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "10e90ff8",
+                  "fields": [
+                    {
+                      "name": "category",
+                      "expression": "`category`"
+                    },
+                    {
+                      "name": "year_month",
+                      "expression": "`year_month`"
+                    },
+                    {
+                      "name": "sum(total_spend)",
+                      "expression": "SUM(`total_spend`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "year_month",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_spend)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "frame": {
+                "title": "Category-wise Spending",
+                "showTitle": true
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "dark": "#154A76"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "65e18627",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "2755c312",
+                  "fields": [
+                    {
+                      "name": "daily(transaction_date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `transaction_date`)"
+                    },
+                    {
+                      "name": "sum(daily_spend)",
+                      "expression": "SUM(`daily_spend`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(transaction_date)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(daily_spend)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "title": "Daily Expense Trend Over Time",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "36cd5b7f",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "5ba408db",
+                  "fields": [
+                    {
+                      "name": "merchant",
+                      "expression": "`merchant`"
+                    },
+                    {
+                      "name": "year_month",
+                      "expression": "`year_month`"
+                    },
+                    {
+                      "name": "total_spend",
+                      "expression": "`total_spend`"
+                    },
+                    {
+                      "name": "txn_count",
+                      "expression": "`txn_count`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 1,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "merchant",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100000,
+                    "title": "merchant",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  },
+                  {
+                    "fieldName": "year_month",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "string",
+                    "displayAs": "string",
+                    "visible": true,
+                    "order": 100001,
+                    "title": "year_month",
+                    "allowSearch": false,
+                    "alignContent": "left",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  },
+                  {
+                    "fieldName": "total_spend",
+                    "numberFormat": "0.00",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "float",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100002,
+                    "title": "total_spend",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  },
+                  {
+                    "fieldName": "txn_count",
+                    "numberFormat": "0",
+                    "booleanValues": [
+                      "false",
+                      "true"
+                    ],
+                    "imageUrlTemplate": "{{ @ }}",
+                    "imageTitleTemplate": "{{ @ }}",
+                    "imageWidth": "",
+                    "imageHeight": "",
+                    "linkUrlTemplate": "{{ @ }}",
+                    "linkTextTemplate": "{{ @ }}",
+                    "linkTitleTemplate": "{{ @ }}",
+                    "linkOpenInNewTab": true,
+                    "type": "integer",
+                    "displayAs": "number",
+                    "visible": true,
+                    "order": 100003,
+                    "title": "txn_count",
+                    "allowSearch": false,
+                    "alignContent": "right",
+                    "allowHTML": false,
+                    "highlightLinks": false,
+                    "useMonospaceFont": false,
+                    "preserveWhitespace": false
+                  }
+                ]
+              },
+              "invisibleColumns": [],
+              "allowHTMLByDefault": false,
+              "itemsPerPage": 25,
+              "paginationSize": "default",
+              "condensed": true,
+              "withRowNumber": false,
+              "frame": {
+                "title": "Merchant Spend and Transaction Count",
+                "showTitle": true,
+                "showDescription": false
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 13,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "c44fcdcf",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3f0beb2e",
+                  "fields": [
+                    {
+                      "name": "sum(investment_count)",
+                      "expression": "SUM(`investment_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(investment_count)"
+                }
+              },
+              "frame": {
+                "title": "Investment",
+                "showTitle": true,
+                "showDescription": false
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 0,
+            "width": 1,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "7dd03938",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "f00d254f",
+                  "fields": [
+                    {
+                      "name": "sum(total_debit_amount)",
+                      "expression": "SUM(`total_debit_amount`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_debit_amount)"
+                }
+              },
+              "frame": {
+                "title": "Total Debit ",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 1,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "cabf09b9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "4063f63e",
+                  "fields": [
+                    {
+                      "name": "sum(total_credit_amount)",
+                      "expression": "SUM(`total_credit_amount`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_credit_amount)"
+                }
+              },
+              "frame": {
+                "title": "Total Credit",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 1,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "5a99ac62",
+      "displayName": "Global Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
